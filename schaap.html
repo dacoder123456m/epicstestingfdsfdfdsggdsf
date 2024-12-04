@@ -23,23 +23,19 @@
             overflow: hidden;
         }
         /* General Link Item Style */
+/* General Styles for All Lists */
 .link-item {
-    background-color: #003b70; /* Blue for original links */
-    margin-bottom: 15px;
-    padding: 20px;
-    border: 1px solid #005ea8;
-    border-radius: 8px;
+    margin: 15px 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    padding: 12px;
+    border: 1px solid #444;
+    border-radius: 8px;
+    background-color: #333;
+    transition: background-color 0.3s ease;
 }
-        /* Working List Specific Styling */
-.working .link-item {
-    background-color: #004d00; /* Green for working links */
-    border: 1px solid #006b00;
-}
-        /* Centered Bold Links */
+
 .link-item span {
     font-size: 16px;
     font-weight: bold;
@@ -48,6 +44,12 @@
     word-wrap: break-word;
     text-align: center;
 }
+        /* Working List Specific Styling */
+.working .link-item {
+    background-color: #004d00; /* Green for working links */
+    border: 1px solid #006b00;
+}
+        
         .link-item.highlight {
             background-color: #444; /* Subtle background for highlighted links */
             border: 2px solid #56ccf2; /* Border for highlight */
@@ -92,6 +94,42 @@
 .works-button:hover {
     background-color: #388e3c;
 }
+        /* Original List Styles */
+#linkList .link-item {
+    background-color: #2a2a2a; /* Darker container background */
+    border: 1px solid #444;
+}
+
+#linkList .works-button {
+    background-color: #6bcf6e; /* Green works button */
+}
+
+#linkList .works-button:hover {
+    background-color: #57ab5c;
+}
+
+/* Working List Styles */
+#workingList .link-item {
+    background-color: #2e4c2e; /* Dark green background */
+    border: 1px solid #4caf50;
+}
+
+#workingList .copy-button {
+    background-color: #007bff;
+}
+
+#workingList .copy-button:hover {
+    background-color: #0056b3;
+}
+
+#workingList .delete-button {
+    background-color: #f44336;
+}
+
+#workingList .delete-button:hover {
+    background-color: #d32f2f;
+}
+        
         .list-title {
             font-size: 20px;
             font-weight: bold;
@@ -177,20 +215,22 @@
             background-color: #218838;
         }
         /* Button Styles */
+/* Action Buttons */
 .action-buttons {
     display: flex;
     justify-content: center;
-    gap: 10px; /* Space between buttons */
+    gap: 10px;
     margin-top: 10px;
 }
+
 .action-buttons button {
     padding: 8px 12px;
     font-size: 14px;
-    cursor: pointer;
     color: white;
     border: none;
     border-radius: 5px;
-    width: 100px; /* Uniform button size */
+    cursor: pointer;
+    width: 100px;
     transition: background-color 0.3s ease;
 }
         #resetButton {
@@ -10295,7 +10335,7 @@
         let deleted = JSON.parse(localStorage.getItem('deleted')) || [];
         let working = JSON.parse(localStorage.getItem('working')) || []; // Define 'working' here
 
-        function generateLinkList() {
+function generateLinkList() {
     const linkList = document.getElementById('linkList');
     linkList.innerHTML = "";
 
@@ -10305,6 +10345,18 @@
 
         const linkText = document.createElement('span');
         linkText.textContent = link;
+
+        const worksButton = document.createElement('button');
+        worksButton.textContent = "Works";
+        worksButton.classList.add('works-button');
+        worksButton.onclick = () => {
+            working.push(link);
+            links.splice(index, 1);
+            localStorage.setItem('working', JSON.stringify(working));
+            localStorage.setItem('links', JSON.stringify(links));
+            generateLinkList();
+            generateWorkingLinks();
+        };
 
         const copyButton = document.createElement('button');
         copyButton.textContent = "Copy";
@@ -10325,6 +10377,7 @@
 
         const actionButtons = document.createElement('div');
         actionButtons.classList.add('action-buttons');
+        actionButtons.appendChild(worksButton);
         actionButtons.appendChild(copyButton);
         actionButtons.appendChild(deleteButton);
 
