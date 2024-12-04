@@ -3,49 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hyper open</title>
+    <title>Link Tester</title>
     <style>
         body {
-            background-color: #6a0dad; /* Purple background */
-            color: white; /* White text for contrast */
             font-family: Arial, sans-serif;
+            margin: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            background-color: #1f1f1f; /* Dark background */
+            color: #d1d1d1; /* Light text color */
         }
-        #loadingScreen {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            text-align: center;
-            padding-top: 20%;
-            font-size: 24px;
+        .container {
+            width: 45%;
+            padding: 20px;
+            background-color: #2a2a2a; /* Darker container background */
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
         }
-        #resultScreen {
-            display: none;
+        .link-item {
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            background-color: #333;
+            flex-wrap: wrap;
+            transition: background-color 0.3s ease;
         }
-        button {
-            background-color: #8a2be2; /* Lighter purple for buttons */
+        .link-item.highlight {
+            background-color: #444; /* Subtle background for highlighted links */
+            border: 2px solid #56ccf2; /* Border for highlight */
+        }
+        .link-item.deleted {
+            background-color: #ff6f61; /* Red highlight for deleted links */
+            border-color: #f94f3b;
+        }
+        .link-item button {
+            margin-left: 12px;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
             color: white;
             border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            margin-top: 5px;
+        }
+        .copy-button {
+            background-color: #007bff; /* Blue for copy button */
+        }
+        .copy-button:hover {
+            background-color: #0056b3;
+        }
+        .delete-button {
+            background-color: #f44336; /* Red for delete */
+        }
+        .delete-button:hover {
+            background-color: #d32f2f;
+        }
+        .works-button {
+            background-color: #4caf50; /* Green for works */
+        }
+        .works-button:hover {
+            background-color: #388e3c;
+        }
+        .list-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #f1f1f1;
+            margin-bottom: 20px;
+        }
+        #deletedLinks {
+    margin-top: 20px;
+    background: linear-gradient(135deg, #6a1b1a, #320000); /* Sleek red gradient */
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #8b0000;
+    color: #fff;
+    text-align: center; /* Center align the content */
+}
+
+#deletedLinks .link-item {
+    background-color: #470000; /* Dark red background */
+    margin-bottom: 15px;
+    padding: 20px;
+    border: 1px solid #8b0000;
+    border-radius: 8px;
+    max-width: 100%; /* Ensure full width */
+    text-align: center;
+    display: flex;
+    flex-direction: column; /* Stack buttons below link */
+    align-items: center; /* Center the link and buttons */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+#deletedLinks .link-item span {
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 10px; /* Space between link and buttons */
+    word-wrap: break-word; /* Break long URLs */
+}
+
+#deletedLinks .link-item button {
+    margin: 5px 0; /* Space between buttons */
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 100%; /* Full width buttons */
+    max-width: 200px; /* Max button width */
+    transition: background-color 0.3s ease;
+}
+
+#deletedLinks .copy-button {
+    background-color: #007bff; /* Blue for copy button */
+}
+
+#deletedLinks .copy-button:hover {
+    background-color: #0056b3;
+}
+
+#deletedLinks .delete-button {
+    background-color: #f44336; /* Red for permanently delete */
+}
+
+#deletedLinks .delete-button:hover {
+    background-color: #d32f2f;
+}
+
+#deletedLinks .works-button {
+    background-color: #4caf50; /* Green for works */
+}
+
+#deletedLinks .works-button:hover {
+    background-color: #388e3c;
+}
+
+        button {
+            margin: 12px 0;
             padding: 10px 20px;
-            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
             font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
         }
         button:hover {
-            background-color: #7a1ea1; /* Darker purple on hover */
+            background-color: #218838;
         }
-        textarea {
-            background-color: #e6e6fa; /* Light purple for textarea */
-            color: black;
-            border: 1px solid #8a2be2; /* Border matching button color */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        #resetButton {
+            background-color: #dc3545; /* Red color for reset button */
+        }
+        #resetButton:hover {
+            background-color: #c82333;
         }
     </style>
+</head>
+<body>
+    <div class="container" id="linkContainer">
+        <div class="list-title">Links to Test</div>
+        <div id="linkList"></div>
+    </div>
+
+    <div class="container" id="workingContainer">
+        <div class="list-title">Working Links</div>
+        <div id="workingList"></div>
+        <button id="copyAllButton" onclick="copyAllWorkingLinks()">Copy All Working Links</button>
+        <button id="toggleDeletedButton" onclick="toggleDeletedLinks()">Show Deleted Links</button>
+        <div id="deletedLinks" style="display: none;">
+            <div class="list-title">Deleted Links</div>
+            <div id="deletedLinkList"></div>
+        </div>
+        <button id="resetButton" onclick="resetLocalStorage()">Clear Local Storage</button>
+    </div>
+
     <script>
-        const links = [
-            'https://jnjsnhahyanhhayhah.fr.to/',
+ let links = JSON.parse(localStorage.getItem('links')) || [
+'https://jnjsnhahyanhhayhah.fr.to/',
 'https://v4-seven-roan.vercel.app/',
 'https://sigma-j2rlwri6.b4a.run/',
 'https://holysigmaholyfrockimcomingloisiscool123.masplenedigitalworld.com',
@@ -10114,82 +10262,186 @@
 'https://zzinternet.co.tv',
 'https://zzinternet.info',
 'https://zzoop.com',
-        ];
+];
 
-        async function checkLink(url) {
-            try {
-                let response = await fetch(url, { method: 'HEAD' });
-                return response.ok;
-            } catch {
-                return false;
+        let deleted = JSON.parse(localStorage.getItem('deleted')) || [];
+        let working = JSON.parse(localStorage.getItem('working')) || []; // Define 'working' here
+
+        function generateWorkingLinks() {
+    // Re-fetch the working list from local storage
+    working = JSON.parse(localStorage.getItem('working')) || [];
+
+    const workingList = document.getElementById('workingList');
+    workingList.innerHTML = "";
+
+    working.forEach((link, index) => {
+        const linkItem = document.createElement('div');
+        linkItem.className = 'link-item working';
+
+        const linkText = document.createElement('span');
+        linkText.textContent = link;
+
+        // Add a delete button to move the link to the deleted list
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = "Delete";
+        deleteButton.classList.add('delete-button');
+        deleteButton.onclick = () => moveToDeletedFromWorking(link, index);
+
+        linkItem.appendChild(linkText);
+        linkItem.appendChild(deleteButton);
+
+        workingList.appendChild(linkItem);
+    });
+}
+        function generateLinkList() {
+            const linkList = document.getElementById('linkList');
+            linkList.innerHTML = "";
+
+            links.forEach((link, index) => {
+                const linkItem = document.createElement('div');
+                linkItem.className = 'link-item';
+
+                const linkText = document.createElement('span');
+                linkText.textContent = link;
+
+                const copyButton = document.createElement('button');
+                copyButton.textContent = "Copy";
+                copyButton.classList.add('copy-button');
+                copyButton.onclick = () => copyLink(link, index, linkItem);
+
+                linkItem.appendChild(linkText);
+                linkItem.appendChild(copyButton);
+                linkList.appendChild(linkItem);
+            });
+        }
+
+        function copyLink(link, index, linkItem) {
+    navigator.clipboard.writeText(link).then(() => {
+
+        // Ensure action buttons aren't duplicated
+        if (!linkItem.querySelector('.action-buttons')) {
+            addActionButtons(linkItem, link, index);
+        }
+    });
+}
+
+        function addActionButtons(linkItem, link, index) {
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = "Delete";
+            deleteButton.classList.add('delete-button');
+            deleteButton.onclick = () => deleteLink(link, index);
+
+            const worksButton = document.createElement('button');
+            worksButton.textContent = "Works";
+            worksButton.classList.add('works-button');
+            worksButton.onclick = () => moveToWorking(link, index);
+
+            const actionButtons = document.createElement('div');
+            actionButtons.classList.add('action-buttons');
+            actionButtons.appendChild(deleteButton);
+            actionButtons.appendChild(worksButton);
+
+            linkItem.appendChild(actionButtons);
+        }
+
+        function deleteLink(link, index) {
+            links.splice(index, 1);
+            deleted.push(link);
+            localStorage.setItem('links', JSON.stringify(links));
+            localStorage.setItem('deleted', JSON.stringify(deleted));
+            generateLinkList();
+            generateDeletedLinks();
+        }
+
+        function moveToWorking(link, index) {
+            working.push(link);
+            links.splice(index, 1);
+            localStorage.setItem('working', JSON.stringify(working));
+            localStorage.setItem('links', JSON.stringify(links));
+            generateLinkList();
+            generateWorkingLinks();
+        }
+
+        function moveToDeletedFromWorking(link, index) {
+    working.splice(index, 1); // Remove the link from the working list
+    deleted.push(link); // Add the link to the deleted list
+
+    // Update local storage
+    localStorage.setItem('working', JSON.stringify(working));
+    localStorage.setItem('deleted', JSON.stringify(deleted));
+
+    // Refresh both lists
+    generateWorkingLinks();
+    generateDeletedLinks();
+}
+
+function moveToWorkingFromDeleted(link, index) {
+    deleted.splice(index, 1);
+    working.push(link);
+
+    // Update local storage
+    localStorage.setItem('deleted', JSON.stringify(deleted));
+    localStorage.setItem('working', JSON.stringify(working));
+
+    // Refresh the lists
+    generateDeletedLinks();
+    generateWorkingLinks();
+}
+function permanentlyDeleteLink(index) {
+    deleted.splice(index, 1);
+    localStorage.setItem('deleted', JSON.stringify(deleted));
+    generateDeletedLinks();
+}
+        function generateDeletedLinks() {
+            const deletedLinkList = document.getElementById('deletedLinkList');
+            deletedLinkList.innerHTML = "";
+
+            deleted.forEach((link, index) => {
+                const linkItem = document.createElement('div');
+                linkItem.className = 'link-item deleted';
+
+                const linkText = document.createElement('span');
+                linkText.textContent = link;
+
+                const copyButton = document.createElement('button');
+                copyButton.textContent = "Copy";
+                copyButton.classList.add('copy-button');
+                copyButton.onclick = () => copyLink(link, index, linkItem);
+
+                addActionButtons(linkItem, link, index);
+
+                linkItem.appendChild(linkText);
+                linkItem.appendChild(copyButton);
+                deletedLinkList.appendChild(linkItem);
+            });
+        }
+
+        function toggleDeletedLinks() {
+            const deletedLinksContainer = document.getElementById('deletedLinks');
+            if (deletedLinksContainer.style.display === "none") {
+                deletedLinksContainer.style.display = "block";
+            } else {
+                deletedLinksContainer.style.display = "none";
             }
         }
 
-        async function openLinks() {
-            document.getElementById('loadingScreen').style.display = 'block';
-            document.getElementById('inputScreen').style.display = 'none';
+        function copyAllWorkingLinks() {
+    const allLinks = working.join(' '); // Join with spaces
+    navigator.clipboard.writeText(allLinks).then(() => {
+        alert(`Copied: ${allLinks}`);
+    });
+}
 
-            const totalLinks = links.length;
-            let checkedLinks = 0;
-            let successfulLinksCount = 0;
-            let failedLinksCount = 0;
-            const results = [];
-
-            for (const link of links) {
-                const isLinkAccessible = await checkLink(link);
-                results.push(isLinkAccessible);
-                checkedLinks++;
-                if (isLinkAccessible) {
-                    successfulLinksCount++;
-		window.open(link, '_blank');
-                    break; // Stop the loop when a link is found to work
-                } else {
-                    failedLinksCount++;
-                }
-                document.getElementById('loadingScreen').innerText = `Checked: ${checkedLinks}, Successful: ${successfulLinksCount}, Failed: ${failedLinksCount}, Remaining: ${totalLinks - checkedLinks}`;
+        function resetLocalStorage() {
+            if (confirm("Are you sure you want to clear all data?")) {
+                localStorage.clear();
+                location.reload();
             }
-
-            document.getElementById('loadingScreen').style.display = 'none';
-            document.getElementById('resultScreen').style.display = 'block';
-            document.getElementById('result').innerText = `Number of valid links: ${successfulLinksCount}`;
-            
-            const successfulLinks = links.filter((_, index) => results[index]);
-            document.getElementById('successfulLinks').innerText = `Successful links: ${successfulLinks.join(', ')}`;
-            document.getElementById('failedLinks').innerText = `Failed links: ${failedLinks.join(', ')}`;
-            
-            const randomLink = successfulLinks[Math.floor(Math.random() * successfulLinks.length)];
-            document.getElementById('redirectButton').onclick = function() {
-                window.open(randomLink, '_blank');
-            };
         }
 
-        function stopChecking() {
-            // Logic to stop the checking loop
-            document.getElementById('loadingScreen').style.display = 'none';
-            document.getElementById('resultScreen').style.display = 'block';
-        }
-
-        function reset() {
-            document.getElementById('inputScreen').style.display = 'block';
-            document.getElementById('resultScreen').style.display = 'none';
-        }
+        generateLinkList();
+        generateWorkingLinks();
+        generateDeletedLinks();
     </script>
-</head>
-<body>
-    <div id="inputScreen">
-        <h2>Click the button to check for unblocked links</h2>
-<a href="https://ibb.co/F3G8DQk"><img src="https://i.ibb.co/F3G8DQk/Schaap-logo.png" alt="Schaap-logo" border="0"></a>
-        <br><button onclick="openLinks()">Open Links</button>
-    </div>
-    <div id="loadingScreen">
-        Processing over 10,000 links, this may take a while
-        <button onclick="stopChecking()">Stop Checking</button>
-    </div>
-    <div id="resultScreen">
-        <p id="failedLinks"></p>
-	<p>If this diddnt work, make sure you have pop ups and redirects allowed</p>
-<a href="https://ibb.co/F3G8DQk"><img src="https://i.ibb.co/F3G8DQk/Schaap-logo.png" alt="Schaap-logo" border="0"></a>
-        <br><button onclick="reset()">Try Again</button>
-    </div>
 </body>
 </html>
