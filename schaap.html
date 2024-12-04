@@ -76,27 +76,15 @@
             color: #f1f1f1;
             margin-bottom: 20px;
         }
-#deletedLinks {
-    margin-top: 20px;
-    background: linear-gradient(135deg, #6a1b1a, #320000); /* Sleek red gradient */
-    padding: 20px;
-    border-radius: 10px;
-    border: 1px solid #8b0000;
-    color: #fff;
-    text-align: center; /* Center align the content */
-}
-
 #deletedLinks .link-item {
     background-color: #470000; /* Dark red background */
     margin-bottom: 15px;
     padding: 20px;
     border: 1px solid #8b0000;
     border-radius: 8px;
-    max-width: 100%; /* Ensure full width */
-    text-align: center;
     display: flex;
-    flex-direction: column; /* Stack buttons below link */
-    align-items: center; /* Center the link and buttons */
+    flex-direction: column; /* Stack items */
+    align-items: center; /* Center align content */
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
@@ -106,23 +94,37 @@
     color: #fff;
     margin-bottom: 10px; /* Space between link and buttons */
     word-wrap: break-word; /* Break long URLs */
+    text-align: center;
 }
 
-#deletedLinks .link-item button {
-    margin: 5px 0; /* Space between buttons */
+#deletedLinks .action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Space between buttons */
+    margin-top: 10px;
+}
+
+#deletedLinks .action-buttons button {
     padding: 8px 12px;
     font-size: 14px;
     cursor: pointer;
     color: white;
     border: none;
     border-radius: 5px;
-    width: 100%; /* Full width buttons */
-    max-width: 200px; /* Max button width */
+    width: 100px; /* Uniform button size */
     transition: background-color 0.3s ease;
 }
 
+#deletedLinks .works-button {
+    background-color: #4caf50;
+}
+
+#deletedLinks .works-button:hover {
+    background-color: #388e3c;
+}
+
 #deletedLinks .copy-button {
-    background-color: #007bff; /* Blue for copy button */
+    background-color: #007bff;
 }
 
 #deletedLinks .copy-button:hover {
@@ -130,19 +132,11 @@
 }
 
 #deletedLinks .delete-button {
-    background-color: #f44336; /* Red for permanently delete */
+    background-color: #f44336;
 }
 
 #deletedLinks .delete-button:hover {
     background-color: #d32f2f;
-}
-
-#deletedLinks .works-button {
-    background-color: #4caf50; /* Green for works */
-}
-
-#deletedLinks .works-button:hover {
-    background-color: #388e3c;
 }
 
         button {
