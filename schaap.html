@@ -76,7 +76,7 @@
             color: #f1f1f1;
             margin-bottom: 20px;
         }
-        #deletedLinks {
+#deletedLinks {
     margin-top: 20px;
     background: linear-gradient(135deg, #6a1b1a, #320000); /* Sleek red gradient */
     padding: 20px;
@@ -10393,28 +10393,55 @@ function permanentlyDeleteLink(index) {
     generateDeletedLinks();
 }
         function generateDeletedLinks() {
-            const deletedLinkList = document.getElementById('deletedLinkList');
-            deletedLinkList.innerHTML = "";
+    const deletedLinkList = document.getElementById('deletedLinkList');
+    deletedLinkList.innerHTML = "";
 
-            deleted.forEach((link, index) => {
-                const linkItem = document.createElement('div');
-                linkItem.className = 'link-item deleted';
+    deleted.forEach((link, index) => {
+        const linkItem = document.createElement('div');
+        linkItem.className = 'link-item deleted';
 
-                const linkText = document.createElement('span');
-                linkText.textContent = link;
+        const linkText = document.createElement('span');
+        linkText.textContent = link;
 
-                const copyButton = document.createElement('button');
-                copyButton.textContent = "Copy";
-                copyButton.classList.add('copy-button');
-                copyButton.onclick = () => copyLink(link, index, linkItem);
+        // Create Buttons
+        const worksButton = document.createElement('button');
+        worksButton.textContent = "Works";
+        worksButton.classList.add('works-button');
+        worksButton.onclick = () => {
+            working.push(link);
+            deleted.splice(index, 1);
+            localStorage.setItem('working', JSON.stringify(working));
+            localStorage.setItem('deleted', JSON.stringify(deleted));
+            generateDeletedLinks();
+            generateWorkingLinks();
+        };
 
-                addActionButtons(linkItem, link, index);
+        const copyButton = document.createElement('button');
+        copyButton.textContent = "Copy";
+        copyButton.classList.add('copy-button');
+        copyButton.onclick = () => navigator.clipboard.writeText(link);
 
-                linkItem.appendChild(linkText);
-                linkItem.appendChild(copyButton);
-                deletedLinkList.appendChild(linkItem);
-            });
-        }
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = "Delete";
+        deleteButton.classList.add('delete-button');
+        deleteButton.onclick = () => {
+            deleted.splice(index, 1);
+            localStorage.setItem('deleted', JSON.stringify(deleted));
+            generateDeletedLinks();
+        };
+
+        // Append Elements
+        const actionButtons = document.createElement('div');
+        actionButtons.classList.add('action-buttons');
+        actionButtons.appendChild(worksButton);
+        actionButtons.appendChild(copyButton);
+        actionButtons.appendChild(deleteButton);
+
+        linkItem.appendChild(linkText);
+        linkItem.appendChild(actionButtons);
+        deletedLinkList.appendChild(linkItem);
+    });
+}
 
         function toggleDeletedLinks() {
             const deletedLinksContainer = document.getElementById('deletedLinks');
